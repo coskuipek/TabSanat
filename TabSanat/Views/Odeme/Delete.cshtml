@@ -1,0 +1,44 @@
+﻿@model PaymentViewModel
+
+@{
+    ViewData["Title"] = "Ödeme Sil";
+    ViewData["Heading"] = "Ödemeyi silmek istediğinize emin misiniz?";
+}
+
+
+<div>
+ 
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentDate)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StudentName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PaymentTypeName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PaymentTypeName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete" class="form">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sil" class="btn btn-primary waves-effect waves-light" /> |
+        <a asp-action="Index">Listeye dön</a>
+    </form>
+</div>

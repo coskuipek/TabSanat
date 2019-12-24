@@ -1,0 +1,34 @@
+﻿@model List<CopKutusuViewModel>
+@{
+    ViewData["Title"] = "Çöp Kutusu";
+}
+
+<h2>Çöp Kutusu</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>İsim</th>
+            <th>Tip</th>
+            <th>Tamamen Sil</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.Name</td>
+            <td>@item.TypeName</td>
+            <td>
+                <a asp-controller="@item.ControllerName" asp-action="RealDelete" asp-route-id="@item.Id" class="btn btn-primary">
+                    Sil
+                </a>
+
+                <a asp-controller="@item.ControllerName" asp-action="UnDelete" asp-route-id="@item.Id" class="btn btn-secondary">
+                    Geri Al
+                </a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

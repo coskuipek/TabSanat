@@ -1,0 +1,25 @@
+﻿@model SeasonViewModel
+
+@{
+    ViewData["Title"] = "Sezon Sil";
+    ViewData["Heading"] = "Sezon Sil";
+}
+
+
+<h3>Silmek istediğinize emin misiniz?</h3>
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" class="form">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Sezonu Sil" class="btn btn-primary waves-effect waves-light" /> |
+        <a asp-action="Index">Listeye dön</a>
+    </form>
+</div>

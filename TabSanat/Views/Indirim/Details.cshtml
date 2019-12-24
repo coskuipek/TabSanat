@@ -1,0 +1,27 @@
+﻿@model DiscountViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Discount</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AmountOfDiscount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AmountOfDiscount)
+        </dd>
+    </dl>
+</div>
+

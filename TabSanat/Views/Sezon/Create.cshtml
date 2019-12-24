@@ -1,0 +1,54 @@
+﻿@model SeasonFormModel
+@section Styles {
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Yeni Sezon";
+    ViewData["Heading"] = "Yeni Sezon";
+}
+
+<div class="card-box">
+    <div class="col-md-4">
+        <form asp-action="Create" autocomplete="off" class="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" class="form-control datepicker" type="text" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input asp-for="EndDate" class="form-control datepicker" type="text" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sezonu Aç" class="btn btn-primary waves-effect waves-light" />
+                </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".datepicker").datepicker({
+                autoclose : true,
+                language: "tr",
+                orientation: "bottom"
+            });
+        });
+    </script>
+}

@@ -1,0 +1,55 @@
+﻿@model PaymentFormModel
+@section Styles {
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Ödemeyi Düzenle";
+    ViewData["Heading"] = "Ödemeyi Düzenle";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" autocomplete="off" class="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="PaymentDate" class="control-label"></label>
+                <input asp-for="PaymentDate" class="form-control datepicker" type="text" />
+                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentTypeId" class="control-label"></label>
+                <select asp-for="PaymentTypeId" class="form-control" asp-items="ViewBag.PaymentTypeId"></select>
+                <span asp-validation-for="PaymentTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span>*Miktar değiştiğinde öğrenci borcu değişecektir</span>
+                <span asp-validation-for="Price" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Ödemeyi Değiştir" class="btn btn-primary waves-effect waves-light" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/select2/select2.min.js"></script>
+    <script src="~/assets/libs/select2/i18n/tr.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        $(".datepicker").datepicker({
+            autoclose: true,
+            language: "tr",
+            orientation: "bottom"
+        });
+    });
+    </script>
+}

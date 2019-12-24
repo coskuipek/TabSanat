@@ -1,0 +1,67 @@
+﻿@model DateListViewModel
+
+@using TabSanat.Overloads
+@{
+    var dateTextStyle = "";
+
+    var startDate = Model.Dates.OrderBy(i => i.Date).First();
+}
+
+
+    <div class="ribbon-box" id="kursbilgileri" style="display:none">
+        <div class="ribbon ribbon-primary float-left"><i class="mdi mdi-information-outline mr-1"></i>Kurs Bilgileri</div>
+        <dl class="row col-sm-12 bg-light">
+            <dt class="col-sm-6">Ders başı ücreti</dt>
+            <dd id="single" class="col-sm-6">@ViewBag.Single</dd>
+
+            <dt class="col-sm-6">Katılacağı ders adedi</dt>
+            <dd id="lessoncount" class="col-sm-6">@ViewBag.LessonCount</dd>
+
+            <dt class="col-sm-6">Toplam Ücret</dt>
+            <dd id="totalcount" class="col-sm-6">@ViewBag.TotalCount</dd>
+        </dl>
+    </div>
+
+
+<div class="ribbon-box">
+    <div class="ribbon ribbon-primary float-left"><i class="mdi mdi-calendar-month mr-1"></i>Kurs Takvimi</div>
+    <div class="row col-sm-12">
+        @for (int i = 0; i < 12; i++)
+        {
+            <div class="col-sm-3 bg-light">
+                <h6 class="text-center">@MonthNames.GetMonthName(startDate.AddMonths(i).Month)</h6>
+                <ul class="list-unstyled text-center mb-0">
+                    @foreach (var item in Model.Dates.Where(x => x.Month == startDate.AddMonths(i).Month))
+                    {
+                        @if (item < DateTime.Now)
+                        {
+                            dateTextStyle = "color:red;";
+                        }
+                        else
+                        {
+                            dateTextStyle = "";
+                        }
+
+                       
+                         @if (Model.PaidDates!= null && Model.PaidDates.Count > 0)
+                         {
+                             if (Model.PaidDates.Contains(item))
+                             {
+                                  dateTextStyle = "color:green;";
+                             }
+                         }
+                          @if (Model.IncomingPaidDates!= null && Model.IncomingPaidDates.Count > 0)
+                          {
+                              if (Model.IncomingPaidDates.Contains(item))
+                              {
+                                  dateTextStyle = "color:purple;font-weight:bolder;";
+                              }
+                          }
+
+                        <li style="@dateTextStyle">@item.ToShortDateString()</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>

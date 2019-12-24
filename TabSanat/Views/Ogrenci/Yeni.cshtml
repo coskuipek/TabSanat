@@ -1,0 +1,218 @@
+﻿@model StudentFormModel
+@section Styles{
+
+    <link href="~/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Yeni Öğrenci";
+    ViewData["Heading"] = "Yeni Öğrenci Kaydı";
+}
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <form asp-action="Yeni" enctype="multipart/form-data" autocomplete="off" class="form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="BirthDate" class="control-label"></label>
+                            <input asp-for="BirthDate" class="form-control datepicker" type="text" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="RegisterDate" class="control-label"></label>
+                            <input asp-for="RegisterDate" class="form-control datepicker" type="text" />
+                            <span asp-validation-for="RegisterDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="PhoneNo" class="control-label"></label>
+                            <input asp-for="PhoneNo" class="form-control" />
+                            <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Photo" class="control-label"></label>
+                            <input asp-for="Photo" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="TcKimlikNo" class="control-label"></label>
+                            <input asp-for="TcKimlikNo" class="form-control" />
+                            <span asp-validation-for="TcKimlikNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label asp-for="Institution" class="control-label"></label>
+                            <input asp-for="Institution" class="form-control" />
+                            <span asp-validation-for="Institution" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="FatherFullName" class="control-label"></label>
+                            <input asp-for="FatherFullName" class="form-control" />
+                            <span asp-validation-for="FatherFullName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="FatherPhoneNo" class="control-label"></label>
+                            <input asp-for="FatherPhoneNo" class="form-control" />
+                            <span asp-validation-for="FatherPhoneNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="MotherFullName" class="control-label"></label>
+                            <input asp-for="MotherFullName" class="form-control" />
+                            <span asp-validation-for="MotherFullName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="MotherPhoneNo" class="control-label"></label>
+                            <input asp-for="MotherPhoneNo" class="form-control" />
+                            <span asp-validation-for="MotherPhoneNo" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="FatherJob" class="control-label"></label>
+                            <input asp-for="FatherJob" class="form-control" />
+                            <span asp-validation-for="FatherJob" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label asp-for="MotherJob" class="control-label"></label>
+                            <input asp-for="MotherJob" class="form-control" />
+                            <span asp-validation-for="MotherJob" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="DiscountOfStudent.Id" class="control-label"></label>
+                                <select asp-for="DiscountOfStudent.Id" class="form-control select2" asp-items="ViewBag.DiscountId">
+                                    <option value="">İndirim yok</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                @*<div class="card-box">
+                    <div class="accordion mb-3" id="accordionExample">
+                        <div class="card mb-1">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="my-0">
+                                    <a class="text-primary" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        Kursa Kaydet
+                                    </a>
+                                </h5>
+                            </div>
+
+                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body border">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label asp-for="StartToCourseDate" class="control-label"></label>
+                                                <input asp-for="StartToCourseDate" class="form-control datepicker" type="text" />
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <select asp-for="AssignToCourses" class="form-control select2" asp-items="ViewBag.CourseId" multiple></select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+
+            <div class="card-footer">
+                <input type="submit" value="Öğrenciyi Ekle" class="btn btn-primary waves-effect waves-light" /> |
+                <a asp-action="Index">Listeye dön</a>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script src="~/assets/libs/select2/select2.min.js"></script>
+        <script src="~/assets/libs/select2/i18n/tr.js"></script>
+        <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+        <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $(".select2").select2({
+                    language: "tr"
+                });
+
+                $(".datepicker").datepicker({
+                    autoclose: true,
+                    language: "tr",
+                    orientation: "bottom"
+                });
+
+            });
+        </script>
+    }

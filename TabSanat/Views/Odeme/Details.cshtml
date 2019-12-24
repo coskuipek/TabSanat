@@ -1,0 +1,155 @@
+﻿@model PaymentViewModel
+
+@{
+    ViewData["Title"] = "Tahsilat Makbuzu";
+    ViewData["Heading"] = "Tahsilat Makbuzu";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card-box border">
+            <!-- Logo & title -->
+            <div class="clearfix">
+                <div class="float-left">
+                    <img src="~/images/tablogo.png" alt="" height="60">
+                </div>
+                <div class="float-right">
+                    <h4 class="m-0 mt-3">Tahsilat Makbuzu</h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mt-3">
+                        <h5>Tab Sanat Akademi</h5>
+                        <address class="font-13">
+                            Kentpark AVM Eskişehir Yolu 7. km Kat 1<br>
+                            Çankaya/ANKARA<br>
+                            <abbr title="Telefon">T:</abbr> +90 (312) 219 91 00<br>
+                            <abbr title="Telefon">T:</abbr> +90 (312) 219 97 87
+                        </address>
+                    </div>
+
+                </div><!-- end col -->
+                <div class="col-md-4 offset-md-2">
+                    <div class="mt-4 float-right">
+                        <p class="m-b-10"><strong>Ödeme Tarihi</strong><span class="float-right"> &nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+                        <p>@Html.DisplayFor(model => model.PaymentDate)<span class="float-right"> &nbsp;&nbsp;&nbsp;&nbsp; </span></p>
+                    </div>
+                </div><!-- end col -->
+            </div>
+            <!-- end row -->
+
+            <div class="row mt-2">
+
+                <div class="col-sm-6">
+                    @if (Model.Student != null)
+                    {
+                        <strong class="font-16">Sayın @Html.DisplayFor(model => model.Student.FullName)</strong><br />
+
+                        <address>
+                            @Html.DisplayFor(model => model.Student.Address)
+                            <br>
+                            @if (Model.Student.PhoneNo != null)
+                            {
+                                <abbr title="Telefon">T:</abbr> @Html.DisplayFor(model => model.Student.PhoneNo)
+                            }
+                        </address>
+                    }
+                </div> <!-- end col -->
+
+            </div>
+            <!-- end row -->
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+                        <table class="table mt-1 border">
+                            <thead class="thead-light">
+                                <tr>
+
+                                    <th>Açıklama</th>
+                                    <th style="width: 15%" class="text-center">Adet</th>
+                                    <th style="width: 20%" class="text-center">Birim Fiyatı</th>
+                                    <th style="width: 20%" class="text-center">Toplam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @if (Model.Register != null)
+                                {
+                                    <tr>
+                                        <td>
+                                            <b>
+                                                @Html.DisplayFor(model => model.Register.CourseName)
+                                                -  @Html.DisplayFor(model => model.Register.SeasonName) Kurs Ödemesi
+                                            </b> <br />
+                                            @Html.DisplayFor(model => model.Register.DayOfWeek)
+
+                                        </td>
+                                        <td class="text-center">@Html.DisplayFor(model => model.AmountOfLessons)</td>
+                                        <td class="text-center">@Html.DisplayFor(model => model.Register.Price)</td>
+                                        <td class="text-center">@Html.DisplayFor(model => model.Price)<i class="mdi mdi-currency-try text-dark m-0"></i></td>
+                                    </tr>
+
+                                }
+                                @if (Model.Extras != null)
+                                {
+                                    @foreach (var extra in Model.Extras)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(modelItem => extra.Name)</td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => extra.Amount)</td>
+                                            <td class="text-center">@Html.DisplayFor(modelItem => extra.PriceToSell)</td>
+                                            <td class="text-center">@(extra.PriceToSell * extra.Amount)</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+
+                    </div> <!-- end table-responsive -->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <table class="table table-centered border">
+                        <tr class="text-center">
+                            <td>Kaşe - İmza</td>
+                        </tr>
+                        <tr>
+                            <td><br /><br /><br /></td>
+                        </tr>
+                    </table>
+                </div> <!-- end col -->
+                <div class="col-sm-4">
+                    <p class="mb-1 font-13">Ödeme Tipi: @Html.DisplayFor(model => model.PaymentTypeName)</p>
+                    <p class="font-13">Ödemeyi Alan: @Html.DisplayFor(model => model.UserName)</p>
+                </div>
+                <div class="col-sm-4">
+                    <h3 class="float-right">Toplam<br /> @Html.DisplayFor(model => model.Price)<i class="mdi mdi-currency-try text-dark m-0"></i></h3>
+                </div>
+            </div> <!-- end col -->
+            
+        </div>
+                
+            </div>
+            <!-- end row -->
+
+
+        </div> <!-- end card-box -->
+        <div class="mt-4 mb-1">
+            <div class="text-right d-print-none">
+                <a href="javascript:window.print()" class="btn btn-primary waves-effect waves-light"><i class="mdi mdi-printer mr-1"></i> Yazdır</a>
+
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div>
+
+
+
+

@@ -1,0 +1,35 @@
+﻿@model PaymentTypeViewModel
+@section Styles {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsStyles");}
+}
+@{
+    ViewData["Title"] = "Ödeme Tipi Detayları";
+    ViewData["Heading"] = string.Join(" ", Model.Name, "Ödeme Detayları");
+}
+
+
+<div class="card-box">
+    <table class="table table-striped dt-responsive nowrap display" id="datatable-buttons" style="width:100%">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(x => x.Payments[0].PaymentDate)</th>
+                <th>@Html.DisplayNameFor(x => x.Payments[0].StudentName)</th>
+                <th>@Html.DisplayNameFor(x => x.Payments[0].Price)</th>
+                <th></th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Payments)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.PaymentDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                <td></td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsScripts");}
+}

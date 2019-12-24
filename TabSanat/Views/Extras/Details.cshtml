@@ -1,0 +1,51 @@
+﻿@model ExtraViewModel
+
+@{
+    ViewData["Title"] = "Ürün Detayları";
+    ViewData["Heading"] = "Ürün Detayları";
+}
+
+
+<div class="card-box">
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PriceToBuy)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PriceToBuy)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PriceToSell)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PriceToSell)
+        </dd>
+    </dl>
+</div>
+<h4>Satın Alanlar</h4>
+<div class="card-box">
+
+    <table class="table table-condensed table-bordered">
+        <tr>
+            <th style="width:25%">Satış Tarihi</th>
+            <th style="width:50%">Öğrenci</th>
+            <th style="width:25%">Fiyat</th>
+        </tr>
+        @foreach (var item in Model.SalesThatIncludeExtra)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.DateOfSale)</td>
+                <td>@Html.DisplayFor(modelItem => item.StudentName)</td>
+                <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+            </tr>
+        }
+    </table>
+</div>
+

@@ -1,0 +1,22 @@
+﻿<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item active"><a href="~/">Ana Sayfa</a></li>
+                    @if (ViewContext.RouteData.Values["action"].ToString() != "Index" &&
+                        ViewContext.RouteData.Values["action"].ToString() != "YetkisizGiris" &&
+                      ViewContext.RouteData.Values["action"].ToString() != "HttpStatusCodeHandler")              
+                    {
+                        <li class="breadcrumb-item"> <a asp-action="Index">Listeye dön</a></li>
+                    }
+                    <li class="breadcrumb-item"><a asp-action="" onclick="window.history.go(-1); return false;">Önceki Sayfa</a></li>
+                </ol>
+            </div>
+            <h4 class="page-title">@ViewData["Heading"]</h4>
+
+        </div>
+    </div>
+</div>
+<!-- end page title -->

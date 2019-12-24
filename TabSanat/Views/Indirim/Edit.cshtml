@@ -1,0 +1,56 @@
+﻿@model DiscountFormModel
+@section Styles  {
+    <link href="~/assets/libs/switchery/switchery.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "İndirimi Düzenle";
+    ViewData["Heading"] = "İndirimi Düzenle";
+}
+
+<form asp-action="Edit" autocomplete="off" class="form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="Id" hidden />
+    <div class="card-box">
+        <div class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    İndirim sadece bir kerelik
+                    <input asp-for="OnlyOnce" type="checkbox" data-plugin="switchery" data-color="#1AB394" data-secondary-color="#ED5565" />
+                </div>
+            </div>
+            <div class="col-5">
+                <div class="form-group">
+                    <label asp-for="AmountOfDiscount" class="control-label"></label> (%)
+                    <input asp-for="AmountOfDiscount" class="form-control" />
+                    <span asp-validation-for="AmountOfDiscount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    İndirim TL olarak uygulansın
+                    <input asp-for="IsFixedAmount" type="checkbox" data-plugin="switchery" data-color="#1AB394" data-secondary-color="#ED5565" />
+                    <span asp-validation-for="IsFixedAmount" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="İndirimi Değiştir" class="btn btn-primary waves-effect waves-light" />
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/switchery/switchery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('[data-plugin="switchery"]').each(function (t, e) { new Switchery($(this)[0], $(this).data()) })
+        });
+    </script>
+}

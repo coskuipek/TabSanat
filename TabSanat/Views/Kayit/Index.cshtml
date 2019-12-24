@@ -1,0 +1,161 @@
+﻿@model IEnumerable<RegisterViewModel>
+
+@section Styles {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsStyles");}
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+
+<div class="card-box border">
+    <p>
+        <a asp-action="Create" asp-controller="Kayit" type="button" class="btn btn-primary btn-sm">
+            Kayıt Yap
+        </a>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                data-target="#con-close-modal">
+            Filtrele
+        </button>
+    </p>
+    <table class="table" id="datatable-buttons" style="width:100%;display:none">
+        <thead class="bg-light">
+            <tr>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.StudentName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.RegisterDate)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.StartToCourseDate)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.CourseName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.GroupName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.PaymentLeft)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.NrOfLessonStudentWillJoin)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.DiscountName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.LeaveDate)
+                </th>
+                <th style="width:5%" class="no-sort"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(x=> x.RegisterDate))
+            {
+            <tr>
+                <td>
+                    <a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@item.StudentId">
+                        @Html.DisplayFor(modelItem => item.StudentName)
+                    </a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RegisterDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StartToCourseDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GroupName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentLeft)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NrOfLessonStudentWillJoin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LeaveDate)
+                </td>
+                <td class="text-center">
+                    <ul class="mb-0" style="display:inline-table;">
+                        <li class="list-inline-item dropdown notification-list">
+                            <a class="nav-link dropdown-toggle waves-effect waves-light nav-user remixicon-settings-4-fill" data-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="false" aria-expanded="false">
+
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                    Düzenle
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                    Sil
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Tarihler arası kayıtlar</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form asp-action="TarihFiltre" autocomplete="off">
+                <div class="modal-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-1" class="control-label">Başlangıç Tarihi</label>
+                                <input type="text" class="form-control datepicker" name="startdate" id="startdate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-2" class="control-label">Bitiş Tarihi</label>
+                                <input type="text" class="form-control datepicker" name="enddate" id="enddate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">İptal</button>
+                    <button type="submit" class="btn btn-info waves-effect waves-light">Ara</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsScripts");}
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+        });
+    </script>
+}

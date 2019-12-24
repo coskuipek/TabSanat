@@ -1,0 +1,39 @@
+﻿@model StudentViewModel
+
+@{
+    ViewData["Title"] = "Öğrenciyi Sil";
+    ViewData["Heading"] = "Silmek istediğinize emin misiniz?";
+}
+
+
+
+    <div class="card-box">
+        <h5>Öğrencinin tüm bilgileri, kurs ve ödeme kayıtları silinecektir...</h5>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RegisterDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.RegisterDate)
+            </dd>
+
+        </dl>
+
+        <form asp-action="Delete" class="form">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Öğrenciyi Sil" class="btn btn-primary waves-effect waves-light" /> |
+            <a asp-action="Index">Listeye dön</a>
+        </form>
+    </div>

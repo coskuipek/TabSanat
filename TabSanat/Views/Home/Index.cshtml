@@ -1,0 +1,204 @@
+﻿@model IndexViewModel
+
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    if (SignInManager.IsSignedIn(User))
+    {
+        ViewData["Heading"] = $"Merhaba {UserManager.GetUserAsync(User).Result.FirstName}";
+    }
+    else
+    {
+        ViewData["Heading"] = "=(";
+    }
+
+}
+
+<div class="col-lg-12">
+    <div class="card-box mb-0 border">
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#home" data-toggle="tab" aria-expanded="true" class="nav-link active">
+                    <span class="d-inline-block d-sm-none"><i class="fas fa-home"></i></span>
+                    <span class="d-none d-sm-inline-block">Hızlı İşlemler</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#birthdays" data-toggle="tab" aria-expanded="false" class="nav-link">
+                    <span class="d-inline-block d-sm-none"><i class="far fa-user"></i></span>
+                    <span class="d-none d-sm-inline-block">Doğumgünleri</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#payments" data-toggle="tab" aria-expanded="false" class="nav-link">
+                    <span class="d-inline-block d-sm-none"><i class="far fa-envelope"></i></span>
+                    <span class="d-none d-sm-inline-block">Geciken Ödemeler</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="home">
+            <div class="row">
+                <div class="col-md-3">
+                    <a asp-controller="Ogrenci" asp-action="Yeni">
+                        <div class="card-box text-center border">
+                            <h5 class="mt-0">Öğrenci Ekle</h5>
+                            <p>
+                                <i class="fas fa-user-plus display-4" style="color:black"></i>
+                            </p>
+
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-controller="Kayit" asp-action="Create">
+                        <div class="card-box text-center border">
+                            <h5 class="mt-0">Kursa Kayıt Yap</h5>
+                            <p>
+                                <i class="fas fa-music display-4" style="color:black"></i>
+                            </p>
+
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-controller="Odeme" asp-action="Create">
+                        <div class="card-box text-center border">
+                            <h5 class="mt-0">Kurs Ödemesi Al</h5>
+                            <p>
+                                <i class="mdi mdi-currency-try display-4" style="color:black"></i>
+                            </p>
+
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a asp-controller="Sales" asp-action="Create">
+                        <div class="card-box text-center border">
+                            <h5 class="mt-0">Satış Yap</h5>
+                            <p>
+                                <i class="fas fa-shopping-cart display-4" style="color:black"></i>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="birthdays">
+            <div class="card">
+                @if (Model.BirthdatesToday.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Doğumgünü Bugün</th>
+                                </tr>
+                            </thead>
+                            @foreach (var student in Model.BirthdatesToday)
+                            {
+                                <tr>
+                                    <td>@student.FullName</td>
+                                </tr>
+
+                            }
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p><small>Bugün doğumgünü yok</small></p>
+                }
+
+                @if (Model.BirthdatesThisWeek.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th colspan="2">Doğumgünü Bu Hafta</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var student in Model.BirthdatesThisWeek)
+                            {
+                                <tr>
+                                    <td>@student.FullName</td>
+                                    <td>@Html.DisplayFor(modelItem => student.BirthDate)</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p><small>Bu hafta yaklaşan doğumgünü yok</small></p>
+                }
+
+                @if (Model.BirthdatesThisMonth.Count > 0)
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Doğumgünü Bu Ay</th>
+                                </tr>
+                            </thead>
+
+                            @foreach (var student in Model.BirthdatesThisMonth)
+                            {
+                                <tr>
+                                    <td>@student.FullName</td>
+                                    <td>@Html.DisplayFor(modelItem => student.BirthDate)</td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+                }
+                else
+                {
+                    <p><small>Bu ay yaklaşan doğumgünü yok</small></p>
+                }
+            </div>
+        </div>
+        <div class="tab-pane fade" id="payments">
+            <div class="row">
+                @foreach (var course in Model.CoursesList)
+                {
+                    @if (course.Registers.Count > 0)
+                    {
+
+                        <div class="card-box col-sm-4">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">
+                                            <a asp-controller="Kurs" asp-action="Details" asp-route-id="@course.Id">@course.Name</a></th>
+                                    </tr>
+                                </thead>
+                                @foreach (var register in course.Registers.OrderByDescending(x => x.NumberOfLatePayments))
+                                {
+                                    <tr>
+                                        <td><a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@register.StudentId">@register.StudentName</a></td>
+                                        <td>@register.NumberOfLatePayments</td>
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="row">
+
+</div>

@@ -1,0 +1,120 @@
+﻿@model IEnumerable<SaleViewModel>
+
+@section Styles {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsStyles");}
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+
+
+<div class="card-box border">
+    <p>
+        <a asp-action="Create" asp-controller="Sales" type="button" class="btn btn-primary btn-sm">
+            Satış Yap
+        </a>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                data-target="#con-close-modal">
+            Filtrele
+        </button>
+    </p>
+
+
+    <table class="table table-condensed text-center" id="datatable-buttons" style="width:100%" hidden>
+        <thead class="bg-light">
+            <tr>
+                <th style="width:12%" class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.DateOfSale)
+                </th>
+                <th style="width:20%" class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.StudentName)
+                </th>
+                <th style="width:23%" class="font-weight-bold">Satılanlar</th>
+                <th style="width:10%" class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.PaymentTypeName)
+                </th>
+                <th style="width:20%" class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.AppUserName)
+                </th>
+                <th style="width:10%" class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+                <th class="no-sort" style="width:5%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(x=> x.DateOfSale))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateOfSale)
+                    </td>
+                    <td>
+                        @if (item.StudentId != null)
+                        {
+                            <a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.StudentName)</a>
+                        }
+                    </td>
+                    <td>
+                        <ul class="list-unstyled mb-0">
+                            @foreach (var saleItem in item.SaleItems)
+                            {
+                            <li>@saleItem.ExtraName - @saleItem.PriceEach TL x @saleItem.Amount adet</li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PaymentTypeName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AppUserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPrice)
+                    </td>
+                    <td class="text-center">
+                        <ul class="mb-0" style="display:inline-table;">
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle waves-effect waves-light nav-user remixicon-settings-4-fill" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                        Düzenle
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                        Detaylar
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                        Sil
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="5" style="text-align:right; font-weight:bolder">Toplam:</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@{await Html.RenderPartialAsync("_Filter");}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsScriptsRapor");}
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+        });
+    </script>
+}

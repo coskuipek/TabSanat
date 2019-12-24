@@ -1,0 +1,305 @@
+﻿@model SaleFormModel
+@section Styles{
+    <link href="~/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/switchery/switchery.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = " Satış";
+    ViewData["Heading"] = "Satış";
+
+}
+<form asp-action="Create" class="form" autocomplete="off">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+
+        <div class="card-box col-5 border ml-3">
+            <dl class="row">
+                <dt class="col-sm-5"><label asp-for="DateOfSale" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <input asp-for="DateOfSale" class="form-control datepicker" type="text" />
+                    <span asp-validation-for="DateOfSale" class="text-danger"></span>
+                </dd>
+                <dt class="col-sm-5"><label asp-for="StudentId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="StudentId" id="student" class="form-control select2" asp-items="ViewBag.StudentId">
+                        <option value="">Öğrenci kayıtlı ise seçin</option>
+                    </select>
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </dd>
+                <dt class="col-sm-5"><label asp-for="PaymentTypeId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="PaymentTypeId" class="form-control select2" asp-items="ViewBag.PaymentTypeId">
+                        <option value="">Ödeme tipi seçin</option>
+                    </select>
+                    <span asp-validation-for="PaymentTypeId" class="text-danger"></span>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-box col-6 border ml-1">
+            <span asp-validation-for="ExtrasThatAreSold" class="text-danger"></span>
+            <table id="extrastable" class="table table-sm text-center border" style="width:100%">
+                <thead class="bg-light">
+                    <tr>
+                        <th style="width:40%">Ürün</th>
+                        <th style="width:15%">Adet</th>
+                        <th style="width:15%">Fiyat</th>
+                        <th style="width:30%">
+                            <button type="button" class="btn btn-secondary btn-sm mb-0" data-toggle="modal"
+                                    data-target="#con-close-modal">
+                                Ürün Ekle
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="font-weight:bolder;text-align:right">
+                            Toplam
+                            <span id="result"> 0 </span> TL
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="row">
+                <div class="form-group">
+                        <label>Ödeme Alındı</label>
+                        <input type="checkbox" id="checker" data-plugin="switchery" data-color="#1AB394" data-secondary-color="#ED5565" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" id="complete" value="İşlemi Tamamla" class="btn btn-primary waves-effect waves-light" disabled />
+    </div>
+</form>
+
+
+<div id="con-close-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Satılan ürünü ve adedi seçin</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="field-1" class="control-label">Ürün seçin</label>
+                            <select asp-items="ViewBag.ExtraId" class="form-control select2" id="xpart">
+                                <option value="">Satılacak ürün</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="ExtraAmountPicker" class="control-label">Adet</label>
+                            <input asp-for="ExtraAmountPicker" id="xamount" value="1" class="form-control" />
+                            <span asp-validation-for="ExtraAmountPicker" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">İptal</button>
+                <button type="button" id="addMore" class="btn btn-info waves-effect waves-light">Eklemeye Devam Et</button>
+                <button type="button" id="addRow" class="btn btn-info waves-effect waves-light">Ekle ve Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/select2/select2.min.js"></script>
+    <script src="~/assets/libs/select2/i18n/tr.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script type="text/javascript" src="~/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/assets/libs/datatables/dataTables.bootstrap4.js"></script>
+    <script src="~/assets/libs/switchery/switchery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $(calculateSum);
+
+            $(".select2").select2({
+                language: "tr"
+            });
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+            var t = $('#extrastable').DataTable({
+                ordering: false,
+                searching: false,
+                lengthChange: false,
+                paging: false,
+                info: false,
+                "language": {
+                    "sDecimal": ",",
+                    "sEmptyTable": "Ürün eklenmedi"
+                }
+            });
+            $('[data-plugin="switchery"]').each(function (t, e) { new Switchery($(this)[0], $(this).data()) })
+
+            var changeCheckbox = document.getElementById('checker');
+            var button = document.getElementById('complete');
+            changeCheckbox.onchange = function () {
+                if (changeCheckbox.checked) {
+                    button.disabled = false;
+                }
+                else {
+                    button.disabled = true;
+                }
+            };
+
+            $('#addRow').on('click', function () {
+                var currentpartid = $('#xpart :selected').val();
+
+                if (currentpartid == 0) {
+                    alert("id 0");
+                    return false;
+                }
+
+        $.ajax({
+            url: '@Url.Action("GetPrices")',
+            data: { extraid: currentpartid },
+            cache: false,
+            type: "GET",
+            success: function (result) {
+                var currentpartprice = result.data;
+                console.log(currentpartprice);
+                var currentpartname = $('#xpart :selected').text();
+                var currentamount = $('#xamount').val();
+                if (currentamount <= 0) {
+                    alert("amount 0");
+                    return false;
+                }
+                t.row.add([
+                    '<input type="hidden" class="hiddenpartid" value="' + currentpartid + '"/><strong class="text-center partname">' + currentpartname + '</strong>',
+                    '<input type="hidden" value="' + currentamount + '" class="form-control text-center myamountinfo" readonly/><p class="text-center">' + currentamount + '</p>',
+                    '<p class="price">' + currentpartprice * currentamount+'</p>',
+                    '<button type="button" id="deleteRow" class="btn btn-outline-danger waves-effect waves-light btn-sm">Sil</button>'
+                ]).draw();
+
+
+                $('.hiddenpartid').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Id');
+                });
+                $('.mypartinput').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].ExtraName');
+                });
+                $('.myamountinfo').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Amount');
+                });
+
+                $('#con-close-modal').modal('toggle');
+
+                $('#xpart').find('[value="' + currentpartid + '"]').remove();//
+
+                $('#xpart').val(null).trigger('change');
+
+                $('#xamount').val(1);
+                calculateSum();
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+});
+
+            $('#addMore').on('click', function () {
+                var currentpartid = $('#xpart :selected').val();
+                if (currentpartid == 0) {
+                    alert("id 0");
+                    return false;
+                }
+                $.ajax({
+            url: '@Url.Action("GetPrices")',
+            data: { extraid: currentpartid },
+            cache: false,
+            type: "GET",
+            success: function (result) {
+                var currentpartprice = result.data;
+                console.log(currentpartprice);
+                var currentpartname = $('#xpart :selected').text();
+                var currentamount = $('#xamount').val();
+                if (currentamount <= 0) {
+                    alert("amount 0");
+                    return false;
+                }
+                t.row.add([
+                    '<input type="hidden" class="hiddenpartid" value="' + currentpartid + '"/><strong class="text-center partname">' + currentpartname + '</strong>',
+                    '<input type="hidden" value="' + currentamount + '" class="form-control text-center myamountinfo" readonly/><p class="text-center">' + currentamount + '</p>',
+                    '<p class="price">' + currentpartprice * currentamount+'</p>',
+                    '<button type="button" id="deleteRow" class="btn btn-outline-danger waves-effect waves-light btn-sm">Sil</button>'
+                ]).draw();
+
+
+                $('.hiddenpartid').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Id');
+                });
+                $('.mypartinput').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].ExtraName');
+                });
+                $('.myamountinfo').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Amount');
+                });
+
+                $('#xpart').val(null).trigger('change');
+                $('#xpart').find('[value="' + currentpartid + '"]').remove();//
+                $('#xamount').val(1);
+                calculateSum();
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+});
+
+            $('#extrastable tbody').on('click', '#deleteRow', function () {
+                var hiddenpartid = $(this).closest('tr').find('.hiddenpartid').val();
+                var mypartinput = $(this).closest('tr').find('.partname').text();
+
+                $('#xpart').append(new Option(mypartinput, hiddenpartid))
+                t.row($(this).closest('tr')).remove().draw(false);
+                $('.hiddenpartid').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Id');
+                });
+                $('.mypartinput').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].ExtraName');
+                });
+                $('.myamountinfo').each(function (index) {
+                    $(this).attr('name', 'ExtrasThatAreSold[' + index + '].Amount');
+                });
+                calculateSum();
+            });
+        });
+    </script>
+    <script>
+        function calculateSum() {
+            var sum = 0;
+            $("#result").text(0);
+            $(".price").each(function () {
+
+                var value = $(this).text();
+                // add only if the value is number
+                if (!isNaN(value) && value.length != 0) {
+                    sum += parseFloat(value);
+                    console.log(sum);
+                    $("#result").text(sum);
+                }
+            });
+        };
+    </script>
+
+}

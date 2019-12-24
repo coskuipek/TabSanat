@@ -1,0 +1,179 @@
+﻿@model RegisterFormModel
+@section Styles{
+    <link href="~/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Kursa Kayıt";
+    ViewData["Heading"] = "Kursa Kayıt";
+}
+
+<form asp-action="Create" class="form">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="card-box col-5 border ml-3">
+            <dl class="row">
+                <dt class="col-sm-5"><label asp-for="RegisterDate" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <input asp-for="RegisterDate" class="form-control datepicker" type="text" />
+                    <span asp-validation-for="RegisterDate" class="text-danger"></span>
+                </dd>
+                <dt class="col-sm-5"><label asp-for="StartToCourseDate" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <input asp-for="StartToCourseDate" id="startdate" class="form-control datepicker" type="text"
+                           onchange="javascript:GetDates(document.getElementById('courselist').value,this.value);" />
+                    <span asp-validation-for="StartToCourseDate" class="text-danger"></span>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="StudentId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="StudentId" id="student" class="form-control select2"
+                            asp-items="ViewBag.StudentId" onchange="javascript:GetCourseList(this.value);">
+                        <option value="">Öğrenci seç</option>
+                    </select>
+                    <span asp-validation-for="StudentId" class="text-danger"></span>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="CourseId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="CourseId" id="courselist" class="form-control select2"
+                            onchange="javascript:GetDates(this.value,document.getElementById('startdate').value);"></select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="GroupId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="GroupId" id="grouplist" class="form-control select2"></select>
+                    <span asp-validation-for="GroupId" class="text-danger"></span>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="DiscountId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="DiscountId" class="form-control select2" id="discountlist" asp-items="ViewBag.DiscountId">
+                        <option value=""></option>
+                    </select>
+                    <span asp-validation-for="DiscountId" class="text-danger"></span>
+                </dd>
+
+            </dl>
+            <div class="form-group">
+                <input type="submit" value="İşlemi Tamamla" class="btn btn-primary waves-effect waves-light" />
+            </div>
+        </div>
+
+        <div class="card-box col-6 border ml-3">
+            <div id="datelistpartial">
+
+            </div>
+            
+        </div>
+
+        
+
+
+    </div>
+</form>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/select2/select2.min.js"></script>
+    <script src="~/assets/libs/select2/i18n/tr.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script src="~/assets/libs/twitter-bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            $(".select2").select2({
+                language: "tr"
+
+            });
+
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        function GetCourseList(_studentId) {
+            $("#datelistpartial").html('');
+            var updating = "<option value=''>Yükleniyor</option>"; //PARÇA SELECTİNİ DOLDUR
+            $("#courselist").html(updating);
+
+        var url = '@Url.Action("GetCourses")';
+        $.ajax({
+            url: url,
+            data: { studentid: _studentId },
+            cache: false,
+            type: "POST",
+            success: function (result) {
+                
+                var markuppart = ''; //PARÇA SELECTİNİ DOLDUR
+                var discountvalue = result.data2;
+                for (var x = 0; x < result.data.length; x++) {
+                    markuppart += "<option value=" + result.data[x].value + ">" + result.data[x].text + "</option>";
+                }
+                $("#courselist").html(markuppart).hide();
+                $("#courselist").val('');
+                $('#discountlist').val(discountvalue).change();
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+
+    }
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        function GetDates(_courseId, _startdate) {
+        var updating = "<option value=''>Yükleniyor</option>"; //PARÇA SELECTİNİ DOLDUR
+            $("#grouplist").html(updating);
+
+        $("#datelistpartial").html('');
+        if (_courseId == '') {
+            console.log("nono");
+            return false;
+        }
+        var url = '@Url.Action("GetDates")';
+        $.ajax({
+            url: url,
+            data: { courseid: _courseId, startdate : _startdate },
+            cache: false,
+            type: "POST",
+            success: function (partialViewResult) {
+                $("#datelistpartial").html(partialViewResult);
+                $("#kursbilgileri").show();
+               
+
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+
+        var groupsurl = '@Url.Action("GetGroups")';
+        $.ajax({
+            url: groupsurl,
+            data: { courseid: _courseId },
+            cache: false,
+            type: "POST",
+            success: function (result) {
+                var markuppart = ''; //PARÇA SELECTİNİ DOLDUR
+                for (var x = 0; x < result.data.length; x++) {
+                    markuppart += "<option value=" + result.data[x].value + ">" + result.data[x].text + "</option>";
+                }
+                $("#grouplist").html(markuppart).hide();
+                $("#grouplist").val('');
+
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+    }
+    </script>
+}

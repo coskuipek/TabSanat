@@ -1,0 +1,49 @@
+﻿@model ExpenseFormModel
+
+@{
+    ViewData["Title"] = "Harcamayı Düzenle";
+    ViewData["Heading"] = "Harcamayı Düzenle";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExtraId" class="control-label"></label>
+                <select asp-for="ExtraId" class="form-control" asp-items="ViewBag.ExtraId"></select>
+                <span asp-validation-for="ExtraId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceEach" class="control-label"></label>
+                <input asp-for="PriceEach" class="form-control" />
+                <span asp-validation-for="PriceEach" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary waves-effect waves-light" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Listeye Dön</a>
+</div>
+

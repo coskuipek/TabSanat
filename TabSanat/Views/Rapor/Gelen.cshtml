@@ -1,0 +1,101 @@
+﻿@model IEnumerable<IncomingViewModel>
+
+@section Styles {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsStyles");}
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+}
+
+
+<div class="card-box border">
+    <p>
+        <a asp-action="Create" asp-controller="Sales" type="button" class="btn btn-primary btn-sm">
+            Satış Yap
+        </a>
+        <a asp-action="Create" asp-controller="Odeme" type="button" class="btn btn-primary btn-sm">
+            Kurs Ödemesi Al
+        </a>
+        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                data-target="#con-close-modal">Filtrele</button>
+    </p>
+
+
+    <table class="table table-condensed" id="datatable-buttons" style="width:100%" hidden>
+        <thead class="bg-light">
+            <tr>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.StudentName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.PaymentTypeName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Taksit)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.AppUserName)
+                </th>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderByDescending(x => x.Date))
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                <td>
+                    @if (item.StudentId != null)
+                    {
+                        <a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@item.StudentId">@Html.DisplayFor(modelItem => item.StudentName)</a>
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PaymentTypeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Taksit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AppUserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="6" style="text-align:right">Toplam:</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+@{await Html.RenderPartialAsync("_Filter");}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("DataTables/_ButtonsScriptsRapor");}
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+
+        });
+    </script>
+}

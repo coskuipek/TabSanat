@@ -1,0 +1,46 @@
+﻿@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Tüm Roller";
+    ViewData["Heading"] = "Tüm Roller";
+}
+<div class="card-box">
+    <p>
+        <a asp-action="Create" class="btn btn-primary waves-effect waves-light btn-xs"><i class="fa fa-plus-square mr-1"></i> Yeni Rol </a>
+    </p>
+    <table class="table">
+        <thead class="bg-light">
+            <tr>
+                <th class="font-weight-bold">
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th style="width:5%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td class="text-center">
+                        <ul class="mb-0" style="display:inline-table;">
+                            <li class="list-inline-item dropdown notification-list">
+                                <a class="nav-link dropdown-toggle waves-effect waves-light nav-user remixicon-settings-4-fill" data-toggle="dropdown" href="#" role="button"
+                                   aria-haspopup="false" aria-expanded="false">
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                        Düzenle
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                        Sil
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

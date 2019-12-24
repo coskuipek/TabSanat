@@ -1,0 +1,71 @@
+﻿@model GroupSaveFormModel
+
+@section Styles {
+    <link href="~/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Gruplar";
+}
+
+<h4>Kursu seçin ve grup ayarlarını düzenleyin...</h4>
+
+
+    <form asp-action="Gruplar" class="form" autocomplete="off">
+        <div class="form-group">
+            <select asp-for="CourseId" asp-items="ViewBag.CourseId" class="form-control select2" onchange="GetGroups(this.value)">
+                <option></option>
+            </select>
+        </div>
+
+        <table class="table" id="grouptable" align="center" style="width:75%">
+            <thead class="bg-light">
+                <tr>
+                    <th class="font-weight-bold">Grup Adı</th>
+                    <th class="font-weight-bold text-center">Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.GroupItems.Count; i++)
+                {
+                    <tr>
+                        <td>
+                            <input asp-for="@Model.GroupItems[i].Id" hidden />
+                            <input asp-for="@Model.GroupItems[i].Name" class="form-control" />
+                        </td>
+                        <td><input asp-for="@Model.GroupItems[i].DeleteThis" class="form-control" /></td>
+                    </tr>
+                }
+                <tr>
+                    <td><input asp-for="@Model.NewName" class="form-control" placeholder="Yeni Grup Adı..." /></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group">
+            <input type="submit" value="Değişiklikleri Kaydet" class="btn btn-primary waves-effect waves-light btn-block" />
+        </div>
+    </form>
+
+
+@section Scripts {
+    <script src="~/assets/libs/select2/select2.min.js"></script>
+    <script src="~/assets/libs/select2/i18n/tr.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+            $(".select2").select2({
+                language: "tr",
+                placeholder: "Kurs seçin"
+            });
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+    function GetGroups(_courseid) {
+
+        var link = '@Url.Action("Gruplar")' + '?courseid=' + _courseid;
+        console.log(link);
+        window.location.href = link;
+    }
+    </script>
+}

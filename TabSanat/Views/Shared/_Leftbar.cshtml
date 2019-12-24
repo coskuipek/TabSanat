@@ -1,0 +1,154 @@
+﻿<div class="left-side-menu">
+
+    <div class="slimscroll-menu">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+
+            <ul class="metismenu" id="side-menu">
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="menu-title">Yönetici İşlemleri</li>
+                    <li>
+                        <a href="javascript: void(0);" class="waves-effect">
+                            <i class="remixicon-repeat-line"></i>
+                            <span> Sezon </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li><a asp-area="" asp-controller="Sezon" asp-action="Index">Tüm Sezonlar</a></li>
+                            <li><a asp-area="" asp-controller="Sezon" asp-action="Create">Yeni Sezon Aç</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="waves-effect">
+                            <i class="remixicon-emotion-unhappy-line"></i>
+                            <span> Harcamalar </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li><a asp-area="" asp-controller="Harcama" asp-action="Index">Tüm Harcamalar</a></li>
+                            <li><a asp-area="" asp-controller="Harcama" asp-action="Create">Yeni Harcama</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="waves-effect">
+                            <i class="remixicon-file-line"></i>
+                            <span> Raporlar </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+
+                            <li><a asp-area="" asp-controller="Rapor" asp-action="Gelen">Gelen Para</a></li>
+                            <li><a asp-area="" asp-controller="Takip" asp-action="Index">İşlem Geçmişi</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);" class="waves-effect">
+                            <i class="remixicon-settings-4-line"></i>
+                            <span> Ayarlar </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li><a asp-area="" asp-controller="Indirim" asp-action="Index">İndirimler</a></li>
+                            <li><a asp-area="" asp-controller="OdemeTipi" asp-action="Index">Ödeme Tipleri</a></li>
+                            <li><a asp-area="" asp-controller="Extras" asp-action="Index">Ürünler</a></li>
+                            <li><a asp-area="" asp-controller="Hesap" asp-action="Index">Kullanıcı Ayarları</a></li>
+                            <li><a asp-area="" asp-controller="Roles" asp-action="Index">Rol Ayarları</a></li>
+                            <li><a asp-area="" asp-controller="Ayarlar" asp-action="Index">Diğer Ayarlar</a></li>
+                        </ul>
+                    </li>
+                    <li ><a asp-area="" asp-controller="CopKutusu" asp-action="Index"><i class="remixicon-delete-bin-2-line"></i>Çöp Kutusu</a></li>
+                }
+
+
+                <li class="menu-title mt-2">Tab Sanat</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="remixicon-user-line"></i>
+                        <span> Öğrenciler </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a asp-area="" asp-controller="Ogrenci" asp-action="Index">Öğrenci Listesi</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Ogrenci" asp-action="Yeni">Yeni Öğrenci</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Ogrenci" asp-action="Ayrilanlar">Ayrılan Öğrenciler</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="remixicon-music-2-line"></i>
+                        <span> Kurs </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a asp-area="" asp-controller="Kurs" asp-action="Index">Kurs Listesi</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Kayit" asp-action="Index">Tüm Kayıtlar</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Kayit" asp-action="Create">Yeni Kayıt</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Ogrenci" asp-action="KurstanCikar">Kayıt İptali</a>
+                        </li>
+                        <li><a asp-area="" asp-controller="Kurs" asp-action="Gruplar">Grup Ayarları</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="remixicon-money-dollar-box-line"></i>
+                        <span> Kurs Ödemeleri </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a asp-area="" asp-controller="Odeme" asp-action="Index">Ödeme Listesi</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Odeme" asp-action="Create">Ödeme Al</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Odeme" asp-action="Iade">Ödeme İadesi</a>
+                        </li>
+                    </ul>
+
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="remixicon-shopping-cart-line"></i>
+                        <span> Satış </span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a asp-area="" asp-controller="Sales" asp-action="Index">Tüm Satışlar</a>
+                        </li>
+                        <li>
+                            <a asp-area="" asp-controller="Sales" asp-action="Create">Satış Yap</a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+        </div>
+        <!-- End Sidebar -->
+
+        <div class="clearfix"></div>
+
+    </div>
+    <!-- Sidebar -left -->
+
+</div>

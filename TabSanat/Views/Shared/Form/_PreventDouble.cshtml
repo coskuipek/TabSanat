@@ -1,0 +1,8 @@
+﻿<script>
+    $('.form').submit(function () {
+        if ($(this).valid()) {
+            $(this).find(':submit').attr('disabled', 'disabled');
+            setTimeout(function () { $(this).removeAttr("disabled") }, 1000);
+        }
+    });
+</script>

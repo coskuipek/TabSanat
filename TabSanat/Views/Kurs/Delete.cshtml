@@ -1,0 +1,36 @@
+﻿@model CourseViewModel
+
+@{
+    ViewData["Title"] = "Öğrenciyi Sil";
+    ViewData["Heading"] = "Silmek istediğinize emin misiniz?";
+}
+
+<div class="card-box">
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OneLessonPrice)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OneLessonPrice)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SeasonName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SeasonName)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete" class="form">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-primary waves-effect waves-light" /> |
+        <a asp-action="Index">Listeye dön</a>
+    </form>
+</div>

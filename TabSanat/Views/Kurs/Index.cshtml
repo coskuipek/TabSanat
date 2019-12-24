@@ -1,0 +1,76 @@
+﻿@model IEnumerable<CourseViewModel>
+
+@{
+    ViewData["Title"] = "Tüm Kurslar";
+    ViewData["Heading"] = "Tüm Kurslar";
+    var courseStyle = "";
+}
+
+<div class="card-box border">
+    <table class="table">
+        <thead class="bg-light">
+            <tr>
+                <th class="font-weight-bold" style="width:30%">
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th class="font-weight-bold" style="width:25%">
+                    @Html.DisplayNameFor(model => model.Groups)
+                </th>
+                <th class="font-weight-bold text-center" style="width:15%">
+                    @Html.DisplayNameFor(model => model.OneLessonPrice)
+                </th>
+                <th class="font-weight-bold text-center" style="width:15%">
+                    @Html.DisplayNameFor(model => model.SeasonName)
+                </th>
+                <th class="font-weight-bold text-center" style="width:10%">
+                    @Html.DisplayNameFor(model => model.CountOfStudents)
+                </th>
+                <th style="width:5%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderBy(x=> x.Name))
+            {
+                @if (item.CourseEnded)
+                {
+                    courseStyle = "color:red";
+                }
+                else
+                {
+                    courseStyle = "";
+                }
+            <tr style="@courseStyle">
+                <td>
+                    <a asp-controller="Kurs" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Name)</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Groups)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.OneLessonPrice)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.SeasonName)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => item.CountOfStudents)
+                </td>
+                <td class="text-center">
+                    <ul class="mb-0" style="display:inline-table;">
+                        <li class="list-inline-item dropdown notification-list">
+                            <a class="nav-link dropdown-toggle waves-effect waves-light nav-user remixicon-settings-4-fill" data-toggle="dropdown" href="#" role="button"
+                               aria-haspopup="false" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right profile-dropdown " aria-labelledby="Preview">
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="dropdown-item notify-item">
+                                    Sil
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

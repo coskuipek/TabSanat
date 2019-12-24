@@ -1,0 +1,111 @@
+﻿<!-- third party js -->
+<script type="text/javascript" src="~/assets/libs/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/dataTables.bootstrap4.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/jszip.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/buttons.bootstrap4.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/buttons.html5.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/datatables/buttons.print.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/pdfmake/pdfmake.min.js"></script>
+<script type="text/javascript" src="~/assets/libs/pdfmake/vfs_fonts.js"></script>
+<!-- third party js ends -->
+<!-- Datatables init -->
+
+<script type="text/javascript" charset="UTF-8">
+
+    $(document).ready(function () {
+
+
+        var table = $("#datatable-buttons").DataTable({
+            dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" + "rt" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+            pageLength: 50,
+            processing: true,
+            lengthChange: false,
+            columnDefs: [
+                { targets: 'no-sort', orderable: false }
+            ],
+            order: [],
+            "language": {
+                "sDecimal": ",",
+                "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                "sInfoEmpty": "Kayıt yok",
+                "sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                "sInfoPostFix": "",
+                "sInfoThousands": ".",
+                "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                "sLoadingRecords": "Yükleniyor...",
+                "sProcessing": "İşleniyor...",
+                "sSearch": "Ara:",
+                "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                "oPaginate": {
+                    "sFirst": "İlk",
+                    "sLast": "Son",
+                    "sNext": "Sonraki",
+                    "sPrevious": "Önceki"
+                },
+                "oAria": {
+                    "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                    "sSortDescending": ": azalan sütun sıralamasını aktifleştir"
+                },
+                "select": {
+                    "rows": {
+                        "_": "%d kayıt seçildi",
+                        "0": "",
+                        "1": "1 kayıt seçildi"
+                    }
+                }
+            },
+            buttons: [
+                {
+                    extend: 'copy',
+                    text: 'Kopyala',
+                    className: 'btn btn-sm glyphicon glyphicon-duplicate',
+                    exportOptions: {
+                        columns: 'th:not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'excel',
+                    className: 'btn btn-sm glyphicon glyphicon-list-alt',
+                    exportOptions: {
+                        columns: 'th:not(:last-child)',
+                        format: {
+                            body: function (data, row, column, node) {
+                                data = $('<p>' + data + '</p>').text();
+                                return $.isNumeric(data.replace(',', '.')) ? data.replace(',', '.') : data;
+                            }
+                        }
+                    }
+                },
+                {
+                    extend: 'pdf', className: 'btn btn-sm glyphicon glyphicon-file', exportOptions: {
+                        columns: 'th:not(:last-child)'
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: 'Yazdır',
+                    className: 'btn btn-sm glyphicon glyphicon-file',
+                    customize: function (doc) {
+                        $(doc.document.body).find('h1').css('font-size', '15pt');
+                        $(doc.document.body).css('font-size', '10pt');
+                        $(doc.document.body).find('table').addClass('compact').css('font-size', 'inherit');
+                    },
+                    exportOptions: {
+                        columns: 'th:not(:last-child)'
+                    }
+                }],
+            initComplete: function () {
+                initialized = true;
+            }
+        });
+
+        table.buttons().container()
+            .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
+        
+    });
+    $("#datatable-buttons").show();
+</script>

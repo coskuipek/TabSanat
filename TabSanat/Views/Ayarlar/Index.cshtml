@@ -1,0 +1,27 @@
+﻿@model List<AppSettingsFormModel>
+@{ 
+    ViewData["Title"] = "Ayarlar";
+        ViewData["Heading"] = "Ayarlar";
+}
+    <form asp-action="Index">
+
+        <dl class="row card-box">
+                @for (int i = 0; i < Model.Count(); i++)
+                {
+                    @Html.HiddenFor(modelItem => modelItem[i].Id)
+            <dt class="col-sm-5">@Html.DisplayFor(modelItem => modelItem[i].SettingName, new { htmlAttributes = new { style = "width:100%;" } })
+            </dt>
+            <dd class="col-sm-7">@Html.EditorFor(modelItem => modelItem[i].Value, new { htmlAttributes = new { style = "width:20%;" } })</dd>
+
+                }
+        </dl>
+
+
+
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Kaydet" class="btn btn-primary waves-effect waves-light" />
+        </div>
+    </form>

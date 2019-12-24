@@ -1,0 +1,41 @@
+﻿@model ExtraFormModel
+
+@{
+    ViewData["Title"] = "Ürünü Düzenle";
+    ViewData["Heading"] = "Ürünü Düzenle";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" class="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceToBuy" class="control-label"></label>
+                <input asp-for="PriceToBuy" class="form-control" />
+                <span asp-validation-for="PriceToBuy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriceToSell" class="control-label"></label>
+                <input asp-for="PriceToSell" class="form-control" />
+                <span asp-validation-for="PriceToSell" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Kaydet" class="btn btn-primary waves-effect waves-light" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Listeye dön</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

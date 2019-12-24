@@ -1,0 +1,65 @@
+﻿@model IEnumerable<TabSanat.ViewModels.Identity.AccountViewModel>
+
+@{
+    ViewData["Title"] = "Kullanıcı Hesapları";
+    ViewData["Heading"] = "Kullanıcı Hesapları";
+}
+
+
+    <p>
+        <a asp-action="Create" class="btn btn-primary waves-effect waves-light btn-sm">Yeni Kullanıcı</a>
+        <a asp-controller="Roles" asp-action="Index" class="btn btn-primary waves-effect waves-light btn-sm"> Roller </a>
+    </p>
+<div class="row">
+    <div class="col-12">
+        <div class="card-box">
+            <div class="table-responsive">
+                <table class="table m-0">
+                    <thead>
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.UserName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.LastName)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.RoleName)
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.UserName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FirstName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.LastName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.RoleName)
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="on-default edit-row"
+                                       data-toggle="tooltip" data-placement="top" title="" data-original-title="Düzenle">
+                                        <i class="ti-more-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

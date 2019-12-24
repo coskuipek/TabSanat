@@ -1,0 +1,8 @@
+﻿@using TabSanat.Services.Interfaces;
+@inject  IAppSettingsService _settings;
+@{
+    Layout = "_Layout";
+    var company = await _settings.GetSettingAsync(x => x.Id == 1);
+    ViewData["CompanyName"] = company.Value;
+ 
+}

@@ -1,0 +1,276 @@
+﻿@model PaymentFormModel
+@section Styles {
+    <link href="~/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+}
+@{ var formTarget = "Create";
+    var giveback = "false";
+
+    if (Model.IsGiveBack == true)
+    {
+        formTarget = "Iade";
+        giveback = "true";
+    }
+}
+
+<form asp-action="@formTarget" autocomplete="off" class="form">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="IsGiveBack" hidden />
+    <div class="row">
+        <div class="card-box col-5 border ml-3">
+            <dl class="row">
+                <dt class="col-sm-5"><label asp-for="PaymentDate" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <input asp-for="PaymentDate" class="form-control datepicker" type="text" />
+                    <span asp-validation-for="PaymentDate" class="text-danger"></span>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="StudentId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="StudentId" id="student" class="form-control select2" asp-items="ViewBag.StudentId"
+                            onchange="javascript:GetRegisterList(this.value,@giveback)">
+                        <option></option>
+                    </select>
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="RegisterId" class="control-label"></label> <span><small id="clear">Temizle</small></span></dt>
+                <dd class="col-sm-7">
+                    <select asp-for="RegisterId" class="form-control select2-noholder" id="registerlist"
+                            onchange="javascript:GetRemainingPrice(this.value,1);"></select>
+                </dd>
+
+
+            </dl>
+            <dl id="pricedl" class="row" hidden>
+                <dt class="col-sm-5"><label asp-for="PaymentTypeId" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <div class="row">
+                        @for (int i = 0; i < Model.PaymentTypes.Count; i++)
+                        {
+                        <div class="col-sm-6">
+                            <div class="custom-control custom-radio">
+                                <input type="radio" asp-for="PaymentTypeId" class="custom-control-input paymenttype"
+                                       id="PaymentType[@i]" value="@Model.PaymentTypes[i].Id">
+                                <label class="custom-control-label" id="for_@Model.PaymentTypes[i].Id" for="PaymentType[@i]">@Model.PaymentTypes[i].Name</label>
+                            </div>
+                        </div>
+                        }
+                    </div>
+                </dd>
+
+                <dt class="col-sm-5 taksitdiv" hidden><label class="control-label">Taksit Sayısı</label></dt>
+                <dd class="col-sm-7 taksitdiv" hidden>
+                    <input class="form-control col-md-7" asp-for="Taksit" value="1"
+                           id="taksitadet">
+                </dd>
+
+                <dt class="col-sm-5"><label class="control-label">Ödenecek Ders Adedi</label></dt>
+                <dd class="col-sm-7">
+                    <input class="col-lg-4" id="lessoncount" type="text" value="1" name="lessoncount"
+                           onchange="javascript:RefreshDateList(document.getElementById('registerlist').value,this.value);">
+                </dd>
+
+                <dt class="col-sm-5"><label asp-for="Price" class="control-label"></label></dt>
+                <dd class="col-sm-7">
+                    <input asp-for="Price" id="totalprice" style="font-weight:bold" class="form-control col-md-7" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </dd>
+            </dl>
+            <div class="form-group">
+                <input type="submit" value="Ödemeyi Kaydet" class="btn btn-primary waves-effect waves-light" />
+            </div>
+        </div>
+
+
+        <div class="card-box col-5 border ml-3">
+            <dl class="row">
+                <dt class="col-sm-6">Kalan toplam borç</dt>
+                <dd id="total" class="col-sm-6">0</dd>
+
+                <dt class="col-sm-6">Ders başı ücreti</dt>
+                <dd id="single" class="col-sm-6">0</dd>
+
+                <dt class="col-sm-6">Beklenen ödeme miktarı</dt>
+                <dd id="expected" class="col-sm-6">0</dd>
+            </dl>
+            <div id="datelistpartial">
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/select2/select2.min.js"></script>
+    <script src="~/assets/libs/select2/i18n/tr.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script src="~/assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+
+    <script>
+        var courseprice = undefined;
+        $(document).ready(function () {
+
+            $(".select2").select2({
+                language: "tr",
+                placeholder: "Öğrenci seçin"
+            });
+            $(".select2-noholder").select2({
+                language: "tr"
+            });
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom"
+            });
+
+
+
+            $(".paymenttype").change(function () {
+                var labeltext = document.getElementById("for_" + this.value).innerHTML;
+                if (labeltext == "Nakit") {
+                    $(".taksitdiv").attr("hidden", true);
+                    $("#taksitadet").val(1);
+
+                }
+                else {
+                    $(".taksitdiv").removeAttr('hidden');
+
+                }
+            });
+            $("#lessoncount").TouchSpin({
+                        min: 1,
+                        initval: 1,
+                        step: 1 
+                    });
+
+            var a = document.getElementById('clear');
+            a.addEventListener('click', function () {
+                GetRegisterList(document.getElementById('student').value);
+                $("#total").text(''); $("#expected").text('');
+            }, false);
+        });
+    </script>
+    <script language="javascript" type="text/javascript">
+        function GetRegisterList(_studentId, _giveback) {
+            $("#pricedl").attr("hidden",true);
+            $("#total, #expected, #single").text('0');
+
+            $("#totalprice").val(0,00);
+
+            $("#pricedl").attr("hidden", true);
+
+            var updating = "<option value=''>Yükleniyor</option>"; //PARÇA SELECTİNİ DOLDUR
+            $("#registerlist").html(updating);
+            $("#registerlist").val('');
+
+            var url = '@Url.Action("GetRegisters", "Kayit")';
+
+        $.ajax({
+            url: url,
+            data: { studentid: _studentId, giveback : _giveback },
+            cache: false,
+            type: "POST",
+            success: function (result) {
+
+                var markuppart = '<option></option>'; //PARÇA SELECTİNİ DOLDUR
+                for (var x = 0; x < result.data.length; x++) {
+                    markuppart += "<option value=" + result.data[x].value + ">" + result.data[x].text + "</option>";
+                }
+                $("#registerlist").html(markuppart).hide();
+                $("#registerlist").val('');
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+    }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function GetRemainingPrice(_registerId, _lessonsToPay) {
+           
+
+            var url = '@Url.Action("GetRemainingPrice")';
+            $.ajax({
+                url: url,
+                data: { registerid: _registerId },
+                cache: false,
+                type: "POST",
+                success: function (result) {
+                    $("#totalprice").val("");
+                    $("#total").text('');
+                    $("#total").html(result.data[0] + ' TL');
+
+                    $("#single").text('');
+                    $("#single").text(result.data[1] + ' TL');
+
+                    $("#expected").text('');
+                    $("#expected").text(result.data[2] + ' TL (' + result.data[3] + ' ders gecikti)');
+
+                    var count = parseInt(result.data[4]);
+                    console.log(count);
+                    courseprice = result.data[1];
+                    $("#lessoncount").val(1);
+                     $("#lessoncount").trigger("touchspin.updatesettings", {max: count});
+                    console.log(count);
+                    RefreshDateList(_registerId, _lessonsToPay)
+
+                    $("#pricedl").removeAttr('hidden');
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+
+    }
+    </script>
+    <script>
+        function PriceCalc(p1, p2) {
+            var pricetopay = p1.replace(/,/g, '.') * p2;
+            pricetopay = pricetopay.toFixed(2);
+
+            var newpricetopay = pricetopay.toString();
+            var lastpricetopay = newpricetopay.replace(/\./g, ',');
+            return lastpricetopay;
+        }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function RefreshDateList(_registerId, _lessonsToPay, maxcount) {
+            $("#datelistpartial").html('');
+            var dateurl = '@Url.Action("GetDates")';
+        $.ajax({
+            url: dateurl,
+            data: { registerid: _registerId, lessonsToPay: _lessonsToPay },
+            cache: false,
+            type: "POST",
+            success: function (partialViewResult) {
+                $("#datelistpartial").html(partialViewResult);
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+           
+            var lastpricetopay = PriceCalc(courseprice, _lessonsToPay);
+            $("#totalprice").val(lastpricetopay);
+            
+    }
+    </script>
+
+
+    @*<script language="javascript" type="text/javascript">
+        function GetDates(_courseId, _startdate) {
+            $("#datelistpartial").html('');
+            if (_courseId == '') {
+                console.log("nono");
+                return false;
+            }
+
+        }
+        </script>*@
+
+}

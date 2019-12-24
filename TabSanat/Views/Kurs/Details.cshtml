@@ -1,0 +1,209 @@
+﻿@model CourseViewModel
+@using TabSanat.Overloads
+@{
+    ViewData["Title"] = $"{Model.Name} Detayları";
+    ViewData["Heading"] = $"{Model.Name} ({Model.SeasonName}) Detayları";
+    var dateStyle = "";
+    var startDate = Model.StartDate.Date;
+
+}
+<div class="card-box border">
+    <div class="row">
+        <div class="col-md-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.StartDate)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.StartDate)</dd>
+
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.EndDate)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.EndDate)</dd>
+
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.DayOfWeekName)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.DayOfWeekName)</dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.OneLessonPrice)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.OneLessonPrice) <span><i class="mdi mdi-currency-try"></i></span></dd>
+
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.TotalNumberOfLessons)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.TotalNumberOfLessons)</dd>
+
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.CountOfStudents)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.CountOfStudents)</dd>
+
+
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.CourseEnded)</dt>
+                <dd class="col-sm-6">
+                    @if (Model.CourseEnded)
+                    {
+                        <span class="badge badge-danger">Tamamlandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-success">Devam Ediyor</span>
+                    }
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="card-box ribbon-box border">
+    <div class="ribbon ribbon-primary float-left"><i class="mdi mdi-access-point mr-1"></i> Öğrenci Detayları</div>
+    <div class="float-right">
+        <select class="dropdown-lg" asp-items="ViewBag.GroupId"
+                onchange="javascript:FilterByGroup(this.value);">
+            <option value="">Tüm Gruplar</option>
+        </select>
+    </div>
+    <table class="table mb-0 text-center" style="table-layout:fixed">
+        <thead class="bg-light">
+            <tr>
+                <th class="font-weight-bold align-middle">Öğrenci</th>
+                <th class="font-weight-bold align-middle">Grup</th>
+                <th>
+                    <button type="button" class="btn btn-light" role="button" data-toggle="popover"
+                            data-trigger="focus" title="Kayıt Tarihi" data-placement="top"
+                            data-content="Öğrencinin bu kursa kayıt olduğu tarih.">
+                        Kayıt Tarihi
+                    </button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-light" role="button" data-toggle="popover"
+                            data-trigger="focus" title="Kayıt Ücreti" data-placement="top"
+                            data-content="Varsa indirimlerden sonra ders başı ücreti">
+                        Kayıt Ücreti
+                    </button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-light" role="button" data-toggle="popover"
+                            data-trigger="focus" title="Toplam Ders" data-placement="top"
+                            data-content="Öğrencinin kursa kayıt tarihinden kursun sonuna kadar alacağı ders sayısı">
+                        Toplam Ders
+                    </button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-light" role="button" data-toggle="popover"
+                            data-trigger="focus" title="Geciken Ödeme" data-placement="top"
+                            data-content="Günü geçen ve karşılığında ödemesi alınmamış ders adedi">
+                        Geciken
+                    </button>
+                </th>
+                <th>
+                    <button type="button" class="btn btn-light" role="button" data-toggle="popover"
+                            data-trigger="focus" title="Toplam Borç" data-placement="top"
+                            data-content="Öğrencinin bu kurs için kalan ödeme miktarı.">
+                        Kalan Ödeme
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        @foreach (var register in Model.Registers.OrderBy(x => x.StartToCourseDate))
+        {
+            <tr>
+                <td><a asp-controller="Ogrenci" asp-action="Details" asp-route-id="@register.StudentId">@register.StudentName</a></td>
+                <td>@register.GroupName</td>
+                <td>
+                    @Html.DisplayFor(modelItem => register.StartToCourseDate)
+                    @if (register.LeaveDate != null)
+                    {
+                        <p style="font-size:10px;color:red" class="mb-0">
+                            @register.LeaveDate.Value.ToShortDateString() tarihinde ayrıldı.
+                        </p>
+                    }
+                </td>
+                <td>@register.Price</td>
+                <td>@register.NrOfLessonStudentWillJoin</td>
+                <td>@register.NumberOfLatePayments</td>
+                <td>@register.PaymentLeft</td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div class="card-box ribbon-box border">
+    <div class="ribbon ribbon-primary float-left"><i class="mdi mdi-calendar-month mr-1"></i>Kurs Takvimi</div>
+    <table class="table table-sm table-bordered text-center table-secondary" style="table-layout:fixed">
+
+        <tr>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(1).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(2).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(3).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(4).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(5).Month)</th>
+        </tr>
+        <tr style="font-family:Cambria, Cochin, Georgia, Times, Times New Roman, serif">
+            @for (int i = 1; i < 7; i++)
+            {
+                <td>
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var item in Model.LessonDates.Where(x => x.Month == startDate.AddMonths(i - 1).Month))
+                        {
+                            @if (item < DateTime.Now)
+                            {
+                                dateStyle = "color:red";
+                            }
+                            else
+                            {
+                                dateStyle = "";
+                            }
+
+                            <li style="@dateStyle">@item.ToShortDateString()</li>
+                        }
+                    </ul>
+                </td>
+            }
+        </tr>
+    </table>
+    <table class="table table-bordered text-center table-condensed table-secondary" style="table-layout:fixed">
+        <tr>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(6).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(7).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(8).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(9).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(10).Month)</th>
+            <th class="font-weight-bold">@MonthNames.GetMonthName(startDate.AddMonths(11).Month)</th>
+        </tr>
+        <tr>
+            @for (int i = 7; i < 13; i++)
+            {
+                <td>
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var item in Model.LessonDates.Where(x => x.Month == startDate.AddMonths(i - 1).Month))
+                        {
+                            @if (item < DateTime.Now)
+                            {
+                                dateStyle = "color:red";
+                            }
+                            else
+                            {
+                                dateStyle = "";
+                            }
+                            <li style="@dateStyle">@item.ToShortDateString()</li>
+                        }
+                    </ul>
+                </td>
+            }
+        </tr>
+    </table>
+</div>
+@*Kurs/Details/2fed98b1-a6e6-4121-f885-08d76912559c
+    ?groupid=2fed98b1-a6e6-4121-f885-08d76912559c*@
+<script language="javascript" type="text/javascript">
+    function FilterByGroup(_groupid, _courseid) {
+        
+        var link = '@Url.Action("Details")' + '?groupid=' + _groupid;
+        console.log(link);
+        window.location.href = link;
+    }
+</script>
+
+
+

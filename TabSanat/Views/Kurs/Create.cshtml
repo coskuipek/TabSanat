@@ -1,0 +1,226 @@
+﻿@model CourseFormModel
+@section Styles{
+    <link href="~/assets/libs/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/assets/libs/switchery/switchery.min.css" rel="stylesheet" type="text/css" />
+}
+@{
+    ViewData["Title"] = "Yeni Kurs";
+    ViewData["Heading"] = "Yeni Kurs Yarat";
+}
+<form asp-action="Create" autocomplete="off" class="form">
+    <div class="row">
+
+        <div class="card-box col-4 border">
+
+            <input asp-for="SeasonId" hidden />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" id="startdate" class="form-control datepicker" type="text"
+                               onchange="javascript:GetLessonCount(this.value, document.getElementById('enddate').value, document.getElementById('dayofweek').value,document.getElementById('oneprice').value);" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" id="enddate" class="form-control datepicker" type="text"
+                               onchange="javascript:GetLessonCount(document.getElementById('startdate').value,this.value,document.getElementById('dayofweek').value, document.getElementById('oneprice').value);" />
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="DayOfWeek" class="control-label"></label>
+                <select asp-for="DayOfWeek" id="dayofweek" class="form-control"
+                        onchange="javascript:GetLessonCount(document.getElementById('startdate').value,document.getElementById('enddate').value, this.value,document.getElementById('oneprice').value );">
+                    <option selected="selected" value="">Gün seç</option>
+                    <option value="1">Pazartesi</option>
+                    <option value="2">Salı</option>
+                    <option value="3">Çarşamba</option>
+                    <option value="4">Perşembe</option>
+                    <option value="5">Cuma</option>
+                    <option value="6">Cumartesi</option>
+                    <option value="0">Pazar</option>
+                </select>
+                <span asp-validation-for="DayOfWeek" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OneLessonPrice" class="control-label"></label>
+                <div class="row">
+                    <div class="col-5">
+                        <input class="form-control text-center" placeholder="0" id="pricebig"
+                               onkeyup="javascript: AddPrices(this.value, document.getElementById('pricesmall').value);" />
+                    </div>
+                    <div class="col-1 font-24 mt-1 font-weight-bolder pl-1 pr-0">,</div>
+                    <div class="col-5">
+                        <input class="form-control text-center" placeholder="00" id="pricesmall"
+                               onkeyup="javascript: AddPrices(document.getElementById('pricebig').value, this.value);" />
+                    </div>
+                    <div class="col-1 mt-2 font-16">TL</div>
+                </div>
+                <input asp-for="OneLessonPrice" id="oneprice" class="form-control" type="hidden" />
+                <span asp-validation-for="OneLessonPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContinueAdding" class="control-label"></label>
+                <input asp-for="ContinueAdding" type="checkbox" data-plugin="switchery" data-color="#1AB394" data-secondary-color="#ED5565" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Kurs Oluştur" class="btn btn-primary waves-effect waves-light" />
+            </div>
+
+
+        </div>
+        <div class="card-box col-2 border ml-3">
+            <table id="grouptable">
+                <thead>
+                    <tr>
+                        <th>Gruplar</th>
+                        <th style="width:5%"><button type="button" data-toggle="modal" data-target="#group-modal">+</button></th>
+                    </tr>
+                </thead>
+            </table>
+
+        </div>
+        <div class="card-box col-4 border ml-3">
+            <dl class="row">
+                <dt class="col-sm-6">Toplam ders adedi</dt>
+                <dd id="lessoncount" class="col-sm-6">0</dd>
+
+                <dt class="col-sm-6">Toplam fiyat</dt>
+                <dd id="totalprice" class="col-sm-6">0</dd>
+            </dl>
+
+        </div>
+    </div>
+</form>
+
+<div id="group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Yeni Grup Ekle</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="field-3" class="control-label">Grup Adı</label>
+                            <input type="text" id="groupitem" class="form-control" placeholder="Grup Adı">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">Kapat</button>
+                <button type="button" id="addgroupbutton" class="btn btn-info waves-effect waves-light">Ekle</button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/assets/libs/bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js"></script>
+    <script src="~/assets/libs/switchery/switchery.min.js"></script>
+    <script src="~/assets/js/price.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var t = $('#grouptable').DataTable({
+                ordering: false,
+                searching: false,
+                lengthChange: false,
+                paging: false,
+                info: false,
+                "language": {
+                    "sDecimal": ",",
+                    "sEmptyTable": "Grup adı yok"
+                }
+            });
+
+            $('#addgroupbutton').on('click', function () {
+                var currentgroupname = $('#groupitem').val();
+                t.row.add([
+                    '<input  class="form-control mygroupname" value="' + currentgroupname + '" readonly/>',
+                    '<button type="button" id="deleteRow">-</button>'
+                ]).draw();
+                document.getElementById('groupitem').value='' ; 
+
+                $('.mygroupname').each(function (index) {
+                    $(this).attr('name', 'Groups[' + index + ']');
+                });
+
+            });
+
+            $('#grouptable tbody').on('click', '#deleteRow', function () {
+                t.row($(this).closest('tr')).remove().draw(false);
+                $('.mygroupname').each(function (index) {
+                    $(this).attr('name', 'Groups[' + index + ']');
+                });
+            });
+
+            $(".datepicker").datepicker({
+                autoclose: true,
+                language: "tr",
+                orientation: "bottom",
+                startDate: "@Model.StartDate.ToShortDateString()",
+                endDate: "@Model.EndDate.ToShortDateString()"
+            });
+        $('[data-plugin="switchery"]').each(function (t, e) { new Switchery($(this)[0], $(this).data()) })
+        });
+    </script>
+    <script language="javascript" type="text/javascript">
+        function GetLessonCount(_startdate, _enddate, _dayofweek, _oneprice) {
+
+        var url = '@Url.Action("LessonCount")';
+        $.ajax({
+            url: url,
+            data: { startdate: _startdate, enddate: _enddate, dayofweek: _dayofweek, oneprice: _oneprice },
+            cache: false,
+            type: "POST",
+            success: function (result) {
+
+                $("#lessoncount").text('');
+                $("#lessoncount").text(result.data[0]);
+
+                $("#totalprice").text('0');
+                $("#totalprice").text(result.data[1]);
+            },
+            error: function (response) {
+                alert("error : " + response);
+            }
+        });
+
+    }
+    </script>
+    <script language="javascript" type="text/javascript">
+        function AddPrices(_pricebig, _pricesmall) {
+            var total = CalculatePrice(_pricebig, _pricesmall);
+
+            $("#oneprice").val(total);
+            var _startdate = $("#startdate").val();
+            var _enddate = $("#enddate").val();
+            var _dayofweek = $("#dayofweek").val();
+
+            GetLessonCount(_startdate, _enddate, _dayofweek, total);
+        }
+    </script>
+
+}

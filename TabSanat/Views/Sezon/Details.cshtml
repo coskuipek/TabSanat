@@ -1,0 +1,53 @@
+﻿@model SeasonViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Name} Detayları";;
+    ViewData["Heading"] = $"{Model.Name} Detayları";
+    decimal Sum = 0;
+}
+
+    <div class="card-box row">
+        <div class="col-md-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.StartDate)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.StartDate)</dd>
+
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.EndDate)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.EndDate)</dd>
+            </dl>
+        </div>
+        
+
+           
+        <div class="col-md-4">
+            <dl class="row mb-0">
+                <dt class="col-sm-6">@Html.DisplayNameFor(model => model.AmountOfMonths)</dt>
+                <dd class="col-sm-6">@Html.DisplayFor(model => model.AmountOfMonths)</dd>
+            </dl>
+               
+        </div>
+    </div>
+
+
+    <div class="card-box">
+    <table class="table table-condensed">
+        <thead>
+            <tr >
+                <th class="font-weight-bold">Kurslar</th>
+                <th class="font-weight-bold">Toplam TL</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.CoursesInSeason)
+        {
+            Sum += item.OneLessonPrice;
+            <tr>
+                <td><a asp-controller="Kurs" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></td>
+                <td>@item.OneLessonPrice</td>
+            </tr>
+        }
+        <tr>
+        <td>Toplam</td>
+        <td>@Sum</td>
+        </tr>
+    </table>
+</div>
